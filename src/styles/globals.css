@@ -4,3 +4,155 @@
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
+
+/* Landing page styles */
+:root { color-scheme: dark; }
+html, body { height: 100%; }
+html { background: #000; }
+body {
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-sans);
+}
+
+/* Brand font from public/font */
+@font-face {
+  font-family: "SSA";
+  src: url("/font/SSA-FONT01-Bold.otf") format("opentype");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+
+.landing { min-height: 100vh; }
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: 24px;
+}
+
+/* Side videos: each half-visible */
+.video-sides {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 0;
+}
+.side-wrap {
+  width: 50vw; /* show exactly half of a full-width video */
+  height: 100%;
+  overflow: hidden;
+}
+.side-video {
+  height: 100%;
+  width: 100vw; /* video spans full viewport width, wrapper clips half */
+  object-fit: cover;
+}
+.side-wrap.left .side-video { object-position: right center; transform: translateX(-25vw); }
+.side-wrap.right .side-video { object-position: left center;  transform: translateX(25vw);}
+
+/* Ensure content sits above videos */
+.brand, .footer { position: relative; z-index: 1; }
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 4vw, 32px);
+}
+.logo {
+  font-family: "SSA", var(--font-sans);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  font-size: clamp(28px, 8vw, 72px);
+}
+.copy { display: flex; flex-direction: column; align-items: flex-start; }
+.cta { max-width: 680px; width: fit-content; }
+.title {
+  margin: 0 0 4px 0;
+  display: inline-block; /* allow container to shrink-wrap to text width */
+  font-family: "SSA", var(--font-sans);
+  font-size: clamp(18px, 4vw, 40px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.cta-row { display: grid; grid-template-columns: 1fr auto; column-gap: 8px; align-items: center; }
+.email-input {
+  width: 100%;
+  height: 24px;
+  padding: 0 8px;
+  background: #fff;
+  color: #000;
+  border: none;
+  outline: none;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;     /* center text and placeholder horizontally */
+  line-height: 24px;      /* center text and placeholder vertically */
+}
+.email-input::placeholder { color: #222; opacity: 0.7; }
+.submit-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  height: 34px;           /* match input height */
+  font-size: 34px;        /* make button bigger; text equals input height */
+  line-height: 34px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0 6px;         /* small horizontal breathing space */
+}
+.submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.submit-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+.status { margin-top: 10px; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+.status.success { color: #9cf59c; }
+.status.error { color: #ff9c9c; }
+
+.footer {
+  position: absolute;
+  inset: auto 12px 12px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.footer-links { display: flex; gap: 18px; }
+.footer-links a {
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 1px solid #fff;
+  padding-bottom: 2px;
+}
+
+@media (max-width: 640px) {
+  .brand { flex-direction: column; text-align: center; }
+  .copy { align-items: center; }
+  .cta { max-width: min(88vw, 520px); width: fit-content; }
+  .footer {
+    font-size: 10px;
+    inset: auto 16px 16px 16px;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+  }
+  .footer-links { flex-wrap: wrap; justify-content: center; gap: 12px 16px; }
+  /* Make side videos slightly visible on phones */
+  .side-wrap { width: 18vw; }
+  .side-wrap.left .side-video { transform: none; }
+  .side-wrap.right .side-video { transform: none; }
+}

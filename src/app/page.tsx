@@ -1,37 +1,92 @@
-import Link from "next/link";
+"use client";
 
-export default function HomePage() {
+import React, { useState } from "react";
+import Image from "next/image";
+
+export default function Page() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [message, setMessage] = useState<string>("");
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+    setMessage("");
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) throw new Error("Failed to subscribe");
+      const data = (await res.json()) as { ok: boolean; message?: string };
+      setStatus("success");
+      setMessage(data.message ?? "Thanks! You're on the list.");
+      setEmail("");
+    } catch (err) {
+      setStatus("error");
+      setMessage("Something went wrong. Please try again.");
+    }
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-        <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-          Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
-        </h1>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-            href="https://create.t3.gg/en/usage/first-steps"
-            target="_blank"
-          >
-            <h3 className="text-2xl font-bold">First Steps →</h3>
-            <div className="text-lg">
-              Just the basics - Everything you need to know to set up your
-              database and authentication.
-            </div>
-          </Link>
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-            href="https://create.t3.gg/en/introduction"
-            target="_blank"
-          >
-            <h3 className="text-2xl font-bold">Documentation →</h3>
-            <div className="text-lg">
-              Learn more about Create T3 App, the libraries it uses, and how to
-              deploy it.
-            </div>
-          </Link>
+    <main className="landing">
+      <section className="hero">
+        {/* Side videos, half-visible on each side */}
+        <div className="video-sides" aria-hidden>
+          <div className="side-wrap left">
+            <video className="side-video" src="/images/404_LOOP.mp4" muted loop autoPlay playsInline />
+          </div>
+          <div className="side-wrap right">
+            <video className="side-video" src="/images/404_LOOP.mp4" muted loop autoPlay playsInline />
+          </div>
         </div>
-      </div>
+        <div className="brand">
+          <span className="logo" aria-hidden>
+            <Image
+              src="/images/SSA_horizontal_logo.svg"
+              alt="SSA Logo"
+              width={240}
+              height={80}
+              priority
+            />
+          </span>
+          <div className="copy">
+            <div className="cta">
+              <h1 className="title">STAY AHEAD OF EVERYONE</h1>
+              <form className="cta-row" onSubmit={onSubmit}>
+                <input
+                  className="email-input"
+                  type="email"
+                  placeholder="E-MAIL"
+                  aria-label="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+                <button className="submit-btn" type="submit" disabled={status === "loading"}>
+                  {status === "loading" ? "SENDING…" : "SUBMIT"}
+                </button>
+              </form>
+              {status !== "idle" && message && (
+                <p className={`status ${status}`}>{message}</p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <footer className="footer">
+          <span>THE SSA PROJECT©</span>
+          <nav className="footer-links" aria-label="Footer">
+            <a href="#">ABOUT US</a>
+            <a href="#">CONTACT</a>
+            <a href="#">SHIPPING</a>
+            <a href="#">RETURN POLICY</a>
+            <a href="#">FAQ</a>
+          </nav>
+        </footer>
+      </section>
     </main>
   );
 }
+import Link from "next/link";
