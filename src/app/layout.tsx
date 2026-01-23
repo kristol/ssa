@@ -2,6 +2,7 @@ import "../styles/globals.css";
 
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
+import Navbar from "../components/Navbar";
 
 export const metadata: Metadata = {
   title: "The SSA Project",
@@ -24,6 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geist.variable}`}>
       <body>
+        <Navbar />
         {/* SVG filter defs for plasma/glitch edge effect */}
         <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden>
           <defs>
@@ -52,6 +54,16 @@ export default function RootLayout({
         </svg>
 
         {children}
+
+        <footer className="footer">
+          <span>THE SSA PROJECT©</span>
+          <nav className="footer-links" aria-label="Footer">
+            <a href="/contact">CONTACT</a>
+            <a href="/shipping">SHIPPING</a>
+            <a href="/return-policy">RETURN POLICY</a>
+            <a href="/faq">FAQ</a>
+          </nav>
+        </footer>
       </body>
     </html>
   );
