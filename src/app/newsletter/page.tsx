@@ -67,6 +67,9 @@ export default function NewsletterPage() {
                   {status === "loading" ? "SENDING…" : "SUBMIT"}
                 </button>
               </form>
+              <p className="consent-inline">
+                By submitting, you agree to our <a href="/privacy">Privacy Policy</a> and to receive emails from The SSA Project. Unsubscribe anytime.
+              </p>
               {status !== "idle" && message && (
                 <p className={`status ${status}`}>{message}</p>
               )}

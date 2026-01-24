@@ -9,9 +9,15 @@ export async function POST(request: Request) {
     const json = await request.json();
     const { email } = bodySchema.parse(json);
 
-    // TODO: Persist email to your database or mailing list provider.
-    // For now, just log it.
-    console.log("Subscribe:", email);
+    // Treat form submission as consent to data usage per inline notice.
+    const consent = true;
+    const consentAt = new Date().toISOString();
+    const ip = request.headers.get("x-forwarded-for") || "";
+    const ua = request.headers.get("user-agent") || "";
+
+    // TODO: Persist to Supabase (or provider) including metadata
+    // { email, consent, consentAt, ip, ua, source: "newsletter" }
+    console.log("Subscribe:", { email, consent, consentAt, ip, ua, source: "newsletter" });
 
     return new Response(
       JSON.stringify({ ok: true, message: "Subscribed successfully." }),
